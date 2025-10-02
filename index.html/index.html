@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despertate</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #d507fe, #ac0fbd);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #initial-message {
+            color: #000000;
+            text-align: center;
+            font-size: 2em;
+            position: absolute;
+            z-index: 10;
+        }
+        .flower-container {
+            position: absolute;
+            pointer-events: none;
+            animation: rise 2s ease-out forwards;
+        }
+        .flower {
+            width: 300px;
+        }
+        .message {
+            color: #000000;
+            font-size: 2em;
+            font-weight: bold;
+            position: absolute;
+            top: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        @keyframes rise {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="initial-message">Buen día gorda, toca la pantalla</h1>
+    <script>
+        let currentFlower = null;
+
+        document.addEventListener('click', (e) => {
+            handleTouch(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            handleTouch(touch.clientX, touch.clientY);
+        });
+
+        function handleTouch(x, y) {
+            // Oculta el mensaje inicial
+            document.getElementById('initial-message').classList.add('hidden');
+
+            // Elimina la flor anterior si existe
+            if (currentFlower) {
+                currentFlower.remove();
+            }
+
+            // Crea la nueva flor y mensaje
+            const container = document.createElement('div');
+            container.className = 'flower-container';
+            container.style.left = `${x - 100}px`; // Centra la flor
+            container.style.top = `${y - 25}px`; // Posición final donde se tocó
+
+            const flower = document.createElement('img');
+            flower.src = 'flower.png.jpg'; // Asegúrate de tener la imagen en la misma carpeta
+            flower.className = 'flower';
+            container.appendChild(flower);
+
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = 'Para vos';
+            container.appendChild(message);
+
+            document.body.appendChild(container);
+            currentFlower = container;
+        }
+    </script>
+</body>
+</html>
